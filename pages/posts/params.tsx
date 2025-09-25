@@ -7,8 +7,15 @@ export default function ParamsPage(props: ParamsPageProps) {
   const router = useRouter();
   return (
     <>
-      <div>Params Page</div>
+      <h1>Params Page</h1>
       <p>Query: {JSON.stringify(router.query)}</p>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  return {
+    props: {},
+  };
 }
