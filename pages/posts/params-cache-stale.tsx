@@ -38,7 +38,7 @@ export default function ParamsPage({ query, post }: ParamsPageProps) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  context.res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalicate');
+  context.res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate');
 
   await new Promise((res) => setTimeout(res, 3000));
 
