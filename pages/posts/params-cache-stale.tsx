@@ -24,7 +24,7 @@ export default function ParamsPage({ query, post }: ParamsPageProps) {
     return () => clearInterval(intervalId);
   }, []);
 
-  const [{ name, color, description }] = post;
+  const { name, color, description } = post[0];
   return (
     <div>
       <h1>Params Page</h1>
