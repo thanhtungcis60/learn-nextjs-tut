@@ -9,6 +9,9 @@ export interface PostDetailPageProps {
 
 export default function PostDetailPage({ post }: PostDetailPageProps) {
   const router = useRouter();
+  if (router.isFallback) {
+    return <div style={{ fontSize: '2rem', textAlign: 'center' }}>Loading ...</div>;
+  }
   if (!post) return null;
   const [{ name, color, description }] = post;
   console.log('name: ', name);
@@ -34,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
@@ -51,5 +54,6 @@ export const getStaticProps: GetStaticProps<PostDetailPageProps> = async (contex
     props: {
       post: data,
     },
+    revalidate: 5,
   };
 };

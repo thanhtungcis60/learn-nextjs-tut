@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -15,7 +17,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   const router = useRouter();
   function goToDetailPage() {
     router.push({ pathname: '/posts/[postId]', query: { postId: 123, ref: 'social' } });
@@ -54,13 +56,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Image
-                className={styles.logo}
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={20}
-                height={20}
-              />
+              <Image className={styles.logo} src="/vercel.svg" alt="Vercel logomark" width={20} height={20} />
               Deploy now
             </a>
             <a
@@ -105,4 +101,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+Home.Layout = MainLayout;
+export default Home;

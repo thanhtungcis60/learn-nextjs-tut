@@ -1,4 +1,5 @@
 import Header from '@/components/common/header';
+import { MainLayout } from '@/components/layout';
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -40,7 +41,7 @@ export default function AboutPage() {
 
   //props: AboutPageProps
   return (
-    <div>
+    <>
       <h1>About page</h1>
       <Header />
       <ul className="post-list">
@@ -52,9 +53,12 @@ export default function AboutPage() {
         }
       </ul>
       <button onClick={handleNextClick}>Next page</button>
-    </div>
+    </>
   );
 }
+
+AboutPage.Layout = MainLayout;
+
 export async function getStaticProps() {
   console.log('get static props');
   return {
