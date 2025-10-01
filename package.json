@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "cookies": "^0.9.1",
     "http-proxy": "^1.18.1",
     "next": "15.5.3",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/axios": "^0.14.4",
     "@types/cookies": "^0.9.1",
     "@types/http-proxy": "^1.17.16",
     "@types/node": "^20",

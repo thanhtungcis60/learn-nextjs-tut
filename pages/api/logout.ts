@@ -12,7 +12,6 @@ export const config = {
     bodyParser: false, //disable body parsing, consume as stream
   },
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method !== 'POST') {
     return res.status(404).json({ message: 'Method not supported' });
