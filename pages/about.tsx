@@ -1,5 +1,6 @@
 import Header from '@/components/common/header';
 import { AdminLayout, MainLayout } from '@/components/layout';
+import { Box, Typography } from '@mui/material';
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -41,8 +42,10 @@ export default function AboutPage() {
 
   //props: AboutPageProps
   return (
-    <>
-      <h1>About page</h1>
+    <Box>
+      <Typography component="h1" variant="h3" color="primary.main">
+        About page
+      </Typography>
       <Header />
       <ul className="post-list">
         {
@@ -53,7 +56,7 @@ export default function AboutPage() {
         }
       </ul>
       <button onClick={handleNextClick}>Next page</button>
-    </>
+    </Box>
   );
 }
 
