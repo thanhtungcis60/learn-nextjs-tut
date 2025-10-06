@@ -12,7 +12,9 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     revalidateOnFocus: false, //qua tab khac ko can revalidate
     ...options,
   });
+  console.log({ profile, error });
 
+  const firstLoading = profile === undefined && error === undefined;
   async function login() {
     await authApi.login({
       username: 'admin',
@@ -30,5 +32,6 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     error,
     login,
     logout,
+    firstLoading,
   };
 }
