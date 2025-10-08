@@ -1,6 +1,6 @@
 import Header from '@/components/common/header';
 import { AdminLayout, MainLayout } from '@/components/layout';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -46,6 +46,9 @@ export default function AboutPage() {
       <Typography component="h1" variant="h3" color="primary.main">
         About page
       </Typography>
+      <Button variant="contained" color="success">
+        Testing
+      </Button>
       <Header />
       <ul className="post-list">
         {
