@@ -21,18 +21,22 @@ import axiosClient from '@/api-client/axios-client';
 import { EmptyLayout } from '@/components/layout';
 import { AppPropsWithLayout } from '@/models';
 import '@/styles/globals.css';
+import { createEmotionCache } from '@/utils/create-emotion-cache';
 import theme from '@/utils/theme';
-import { AppCacheProvider } from '@mui/material-nextjs/v15-pagesRouter';
+import { CacheProvider } from '@emotion/react';
+// import { AppCacheProvider } from '@mui/material-nextjs/v15-pagesRouter';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { SWRConfig } from 'swr';
 
+const clientSideEmotionCache = createEmotionCache();
 export default function App(props: AppPropsWithLayout) {
-  const { Component, pageProps, emotionCache } = props;
+  const { Component, pageProps } = props;
   console.log('App re-render');
   const Layout = Component.Layout ?? EmptyLayout;
   return (
-    <AppCacheProvider {...props}>
+    // <AppCacheProvider {...props}>
+    <CacheProvider value={clientSideEmotionCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SWRConfig value={{ fetcher: (url) => axiosClient.get(url), shouldRetryOnError: false }}>
@@ -41,6 +45,7 @@ export default function App(props: AppPropsWithLayout) {
           </Layout>
         </SWRConfig>
       </ThemeProvider>
-    </AppCacheProvider>
+    </CacheProvider>
+    // </AppCacheProvider>
   );
 }
