@@ -1,4 +1,4 @@
-import { Roboto } from 'next/font/google';
+import { Roboto, Underdog } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
@@ -37,6 +37,19 @@ const theme = createTheme({
           maxWidth: '860px',
           '@media (min-width:900px)': {
             maxWidth: '860px',
+          },
+        },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: 'none',
+      },
+      styleOverrides: {
+        root: {
+          color: 'black',
+          '&:hover': {
+            color: '#FF6464',
           },
         },
       },
