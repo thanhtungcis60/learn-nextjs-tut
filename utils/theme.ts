@@ -1,4 +1,4 @@
-import { Roboto, Underdog } from 'next/font/google';
+import { Heebo, Roboto } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
@@ -8,8 +8,16 @@ export const roboto = Roboto({
   display: 'swap',
 });
 
+export const heebo = Heebo({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 // Create a theme instance.
 const theme = createTheme({
+  typography: {
+    fontFamily: 'Heebo, sans-serif',
+  },
   palette: {
     primary: {
       main: '#FF6464',

@@ -17,7 +17,7 @@ export function HeaderDesktop(props: HeaderDesktopProps) {
               component={Link}
               key={route.path}
               href={route.path}
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, fontWeight: 'medium' }}
               className={clsx({ active: router.pathname === route.path })}
             >
               {route.label}
