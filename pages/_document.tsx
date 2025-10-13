@@ -66,8 +66,9 @@ import {
   documentGetInitialProps,
 } from '@mui/material-nextjs/v15-pagesRouter';
 import { createEmotionCache, roboto } from '@/utils';
-import theme from '@/utils/theme';
+
 import createEmotionServer from '@emotion/server/create-instance';
+import theme from '@/utils/theme';
 
 export default class MyDocument extends Document {
   // static method nằm trong class: ở đây 'super' hợp lệ

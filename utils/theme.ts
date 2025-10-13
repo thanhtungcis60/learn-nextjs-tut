@@ -1,5 +1,5 @@
 import { Heebo, Roboto } from 'next/font/google';
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
 export const roboto = Roboto({
@@ -14,7 +14,7 @@ export const heebo = Heebo({
   display: 'swap',
 });
 // Create a theme instance.
-const theme = createTheme({
+const baseTheme = createTheme({
   typography: {
     fontFamily: 'Heebo, sans-serif',
   },
@@ -75,4 +75,12 @@ const theme = createTheme({
   },
 });
 
+// theme.typography.h3 = {
+//   fontSize: '2rem',
+//   [theme.breakpoints.up('md')]: {
+//     fontSize: '3rem',
+//   },
+// };
+
+const theme = responsiveFontSizes(baseTheme);
 export default theme;
