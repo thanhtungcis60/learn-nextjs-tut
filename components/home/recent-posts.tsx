@@ -2,8 +2,27 @@ import { Box, Container, Stack, Typography, Link as MuiLink, Card } from '@mui/m
 import Link from 'next/link';
 import * as React from 'react';
 import { PostCard } from './post-card';
+import { Post } from '@/models';
 
 export function RecentPosts() {
+  const postList: Post[] = [
+    {
+      id: '1',
+      title: 'Making a design system from scratch',
+      publishedDate: '1760407624011',
+      tagList: ['Design', 'Pattern'],
+      description:
+        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud.',
+    },
+    {
+      id: '2',
+      title: 'Creating pixel perfect icons in Figma',
+      publishedDate: '1760407624011',
+      tagList: ['Figma', 'Icon Design'],
+      description:
+        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    },
+  ];
   return (
     <Box component="section" bgcolor="secondary.light" pt={2} pb={4}>
       <Container>
@@ -18,7 +37,7 @@ export function RecentPosts() {
             component={Link}
             key="view_all"
             href="/blog"
-            sx={{ ml: 2, fontWeight: 'medium', display: { xs: 'none', md: 'inline' } }}
+            sx={{ display: { xs: 'none', md: 'inline' } }}
           >
             View all
           </MuiLink>
@@ -28,12 +47,11 @@ export function RecentPosts() {
           spacing={3}
           sx={{ '& > div': { width: { xs: '100%', md: '50%' } } }}
         >
-          <Box>
-            <PostCard />
-          </Box>
-          <Box>
-            <PostCard />
-          </Box>
+          {postList.map((post) => (
+            <Box key={post.id}>
+              <PostCard post={post} />
+            </Box>
+          ))}
         </Stack>
       </Container>
     </Box>
