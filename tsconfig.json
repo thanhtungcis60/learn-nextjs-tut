@@ -16,8 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/api/*": ["./api-client/*"],
-      "@/images/*": ["./images/*"]
+      "@/api/*": ["./api-client/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
