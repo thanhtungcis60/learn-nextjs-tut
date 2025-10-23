@@ -10,6 +10,7 @@ export interface BlogListPageProps {
 }
 
 export default function BlogListPage({ posts }: BlogListPageProps) {
+  console.log('postList: ', posts);
   return (
     <div>
       <h1>Post List Page</h1>
@@ -26,11 +27,10 @@ export default function BlogListPage({ posts }: BlogListPageProps) {
 
 //getStaticProps chạy phía server : SSG: Static site generation
 export const getStaticProps: GetStaticProps<BlogListPageProps> = async (context: GetStaticPropsContext) => {
-  const data = await getPostList();
+  const postList = await getPostList();
   return {
     props: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      posts: data.map((x: any) => ({ id: x.id, name: x.name })),
+      posts: postList,
     },
   };
 };
