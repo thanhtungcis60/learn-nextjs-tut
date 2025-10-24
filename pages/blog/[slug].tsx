@@ -3,6 +3,13 @@ import { getPostList } from '@/utils/posts';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeDocument from 'rehype-document';
+import rehypeFormat from 'rehype-format';
+import rehypeStringify from 'rehype-stringify';
+import { Container, Divider } from '@mui/material';
 
 export interface BlogDetailPageProps {
   post: Post;
@@ -14,13 +21,16 @@ export default function BlogDetailPage({ post }: BlogDetailPageProps) {
   if (!post) return null;
   const { title, author, description, mdContent } = post;
   return (
-    <div>
+    <Container>
       <h1>Blog Detail Page</h1>
       <p>Title: {title}</p>
       <p>Author: {author?.name}</p>
       <p>Description: {description}</p>
       <p>Content: {mdContent}</p>
-    </div>
+
+      <Divider />
+      <div dangerouslySetInnerHTML={{ __html: post.htmlContent || '' }}></div>
+    </Container>
   );
 }
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -43,6 +53,16 @@ export const getStaticProps: GetStaticProps<BlogDetailPageProps> = async (contex
   if (!slug) return { notFound: true };
   const post = postList.find((x) => x.slug === slug);
   if (!post) return { notFound: true };
+
+  //convert markdown to html
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeDocument, { title: 'Blog details page' })
+    .use(rehypeFormat)
+    .use(rehypeStringify)
+    .process(post.mdContent || '');
+  post.htmlContent = file.toString();
 
   return {
     props: {
