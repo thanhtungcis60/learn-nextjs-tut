@@ -1,18 +1,18 @@
 import { Post } from '@/models';
 import { getPostList } from '@/utils/posts';
+import { Box, Container, Divider } from '@mui/material';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
-import { useRouter } from 'next/router';
-import * as React from 'react';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeDocument from 'rehype-document';
 import rehypeFormat from 'rehype-format';
-import rehypeStringify from 'rehype-stringify';
-import remarkToc from 'remark-toc';
-import { Container, Divider } from '@mui/material';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+import remarkPrism from 'remark-prism';
+import remarkRehype from 'remark-rehype';
+import remarkToc from 'remark-toc';
+import { unified } from 'unified';
+import Script from 'next/script';
 
 export interface BlogDetailPageProps {
   post: Post;
@@ -22,16 +22,19 @@ export default function BlogDetailPage({ post }: BlogDetailPageProps) {
   if (!post) return null;
   const { title, author, description, mdContent } = post;
   return (
-    <Container>
-      <h1>Blog Detail Page</h1>
-      <p>Title: {title}</p>
-      <p>Author: {author?.name}</p>
-      <p>Description: {description}</p>
-      <p>Content: {mdContent}</p>
+    <Box>
+      <Container>
+        <h1>Blog Detail Page</h1>
+        <p>Title: {title}</p>
+        <p>Author: {author?.name}</p>
+        <p>Description: {description}</p>
+        <p>Content: {mdContent}</p>
 
-      <Divider />
-      <div dangerouslySetInnerHTML={{ __html: post.htmlContent || '' }}></div>
-    </Container>
+        <Divider />
+        <div dangerouslySetInnerHTML={{ __html: post.htmlContent || '' }}></div>
+      </Container>
+      <Script src="/prism.js" strategy="afterInteractive"></Script>
+    </Box>
   );
 }
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -59,6 +62,8 @@ export const getStaticProps: GetStaticProps<BlogDetailPageProps> = async (contex
   const file = await unified()
     .use(remarkParse)
     .use(remarkToc)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .use(remarkPrism as any) // .use(remarkPrism as any, { plugins: ['line-numbers'] })
     .use(remarkRehype)
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings)
