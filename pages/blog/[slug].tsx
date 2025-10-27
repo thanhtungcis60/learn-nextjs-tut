@@ -13,6 +13,7 @@ import remarkRehype from 'remark-rehype';
 import remarkToc from 'remark-toc';
 import { unified } from 'unified';
 import Script from 'next/script';
+import { Seo } from '@/components/common';
 
 export interface BlogDetailPageProps {
   post: Post;
@@ -23,6 +24,14 @@ export default function BlogDetailPage({ post }: BlogDetailPageProps) {
   const { title, author, description, mdContent } = post;
   return (
     <Box>
+      <Seo
+        data={{
+          title: `${post.title} | Easy Frontend Blog`,
+          url: `${process.env.HOST_URL}/`,
+          description: post.description,
+          thumbnailUrl: post.thumbnailUrl || '',
+        }}
+      />
       <Container>
         <h1>Blog Detail Page</h1>
         <p>Title: {title}</p>
