@@ -1,54 +1,41 @@
 import { LoginForm } from '@/components/auth';
 import { useAuth } from '@/hooks';
 import { LoginPayload } from '@/models';
+import { Box, Paper, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-
-import * as React from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { profile, login, logout } = useAuth({ revalidateOnMount: false });
-  async function handleLoginClick() {
-    try {
-      await login({
-        username: 'admin',
-        password: '123456',
-      });
-      console.log('Login redirect to home page');
-      router.push('/about');
-    } catch (error) {
-      console.log('failed to login ', error);
-    }
-  }
-
-  async function handleLogoutClick() {
-    try {
-      await logout();
-      console.log('Logout redirect to home page');
-    } catch (error) {
-      console.log('failed to logout ', error);
-    }
-  }
+  const { login } = useAuth({ revalidateOnMount: false });
 
   async function handleLoginSubmit(payload: LoginPayload) {
     try {
       await login(payload);
       // console.log('Login redirect to home page');
-      // router.push('/about');
+      router.push('/');
     } catch (error) {
       console.log('failed to login ', error);
     }
   }
 
   return (
-    <div>
-      <h1>Login Page</h1>
-      <p>Profile: {JSON.stringify(profile || {}, null, 4)}</p>
-      <button onClick={handleLoginClick}>Login</button>
-      <button onClick={handleLogoutClick}>Logout</button>
-      <button onClick={() => router.push('/about')}>Go to about</button>
+    <Box>
+      <Paper
+        elevation={4}
+        sx={{
+          mx: 'auto',
+          my: 8,
+          p: 4,
+          maxWidth: '480px',
+          textAlign: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5" mb={3}>
+          Easy Frontend - Login
+        </Typography>
 
-      <LoginForm onSubmit={handleLoginSubmit} />
-    </div>
+        <LoginForm onSubmit={handleLoginSubmit} />
+      </Paper>
+    </Box>
   );
 }

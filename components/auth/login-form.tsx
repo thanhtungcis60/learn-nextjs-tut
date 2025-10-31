@@ -38,11 +38,12 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
   return (
     <Box component="form" onSubmit={handleSubmit(handleLoginSubmit)}>
-      <InputField name="username" control={control} />
+      <InputField name="username" label="Username" control={control} />
       <InputField
         type={showPassword ? 'text' : 'password'}
         name="password"
         control={control}
+        label="Password"
         slotProps={{
           input: {
             endAdornment: (
@@ -60,7 +61,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         }}
       />
 
-      <Button type="submit" variant="contained">
+      <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
         Login
       </Button>
     </Box>

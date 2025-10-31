@@ -10,7 +10,6 @@ export type InputFieldProps = TextFieldProps & {
 
 export function InputField({
   name,
-  label,
   control,
   onChange: externalOnchange,
   onBlur: externalOnBlur,
