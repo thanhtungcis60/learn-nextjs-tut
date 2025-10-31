@@ -37,6 +37,8 @@ export function InputField({
       onChange={onChange}
       onBlur={onBlur}
       inputRef={ref}
+      error={!!error}
+      helperText={error?.message}
       {...rest}
     />
   );

@@ -30,15 +30,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
       });
       _proxyRes.on('end', function () {
         try {
-          const { accessToken, expiredAt } = JSON.parse(body);
-          //Convert token to cookie
-          const cookies = new Cookies(req, res, { secure: process.env.NODE_ENV !== 'development' });
-          cookies.set('access_token', accessToken, {
-            httpOnly: true,
-            sameSite: 'lax',
-            expires: new Date(expiredAt * 1000),
-          });
-          (res as NextApiResponse).status(200).json({ message: 'Login successfully' });
+          // 🟢 Lấy status code từ proxy response
+          const statusCode = _proxyRes.statusCode;
+
+          if (statusCode === 200) {
+            const { accessToken, expiredAt } = JSON.parse(body);
+            //Convert token to cookie
+            const cookies = new Cookies(req, res, { secure: process.env.NODE_ENV !== 'development' });
+            cookies.set('access_token', accessToken, {
+              httpOnly: true,
+              sameSite: 'lax',
+              expires: new Date(expiredAt * 1000),
+            });
+            (res as NextApiResponse).status(200).json({ message: 'Login successfully' });
+          } else {
+            (res as NextApiResponse).status(statusCode || 99).json({ message: 'Login fail' });
+          }
         } catch (error) {
           (res as NextApiResponse).status(500).json({ message: 'something went wrong' });
         }
