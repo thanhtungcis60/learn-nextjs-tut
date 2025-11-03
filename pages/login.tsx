@@ -1,8 +1,10 @@
 import { LoginForm } from '@/components/auth';
 import { useAuth } from '@/hooks';
 import { LoginPayload } from '@/models';
+import { getErrorMessage } from '@/utils';
 import { Box, Paper, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,8 +15,10 @@ export default function LoginPage() {
       await login(payload);
       // console.log('Login redirect to home page');
       router.push('/');
-    } catch (error) {
-      console.log('failed to login ', error);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      // console.log('failed to login: ', message);
+      toast.error(message);
     }
   }
 

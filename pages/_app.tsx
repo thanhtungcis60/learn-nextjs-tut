@@ -29,6 +29,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { SWRConfig } from 'swr';
 import '@/styles/prism.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const clientSideEmotionCache = createEmotionCache();
 export default function App(props: AppPropsWithLayout) {
@@ -40,6 +42,7 @@ export default function App(props: AppPropsWithLayout) {
     <CacheProvider value={clientSideEmotionCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <ToastContainer />
         <SWRConfig value={{ fetcher: (url) => axiosClient.get(url), shouldRetryOnError: false }}>
           <Layout>
             <Component {...pageProps} />
