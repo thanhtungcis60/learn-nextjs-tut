@@ -1,36 +1,17 @@
-import { workApi } from '@/api-client';
 import { MainLayout } from '@/components/layout';
 import { WorkList } from '@/components/work';
 import { useWorkList } from '@/hooks';
 import { ListParams } from '@/models';
-import { Box, Button, Container, LinearProgress, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box, Container, Pagination, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
 
-export interface WorksPageProps {}
-
-export default function WorksPage(props: WorksPageProps) {
+export default function WorksPage() {
   const [filters, setFilters] = useState<Partial<ListParams>>({ _page: 1, _limit: 10 });
-  const { data: workList, isLoading } = useWorkList({ params: filters });
-  console.log({ workList, isLoading });
-  //   useEffect(() => {
-  //     (async () => {
-  //       try {
-  //         const workList = await workApi.getAll({
-  //           _page: 1,
-  //           _limit: 10,
-  //         });
-  //         console.log('work list: ', workList);
-  //       } catch (error) {
-  //         console.log('Failed to fetch work list', error);
-  //       }
-  //     })();
-  //   }, []);
-  function handlePreviousClick() {
-    setFilters((prev) => ({ ...prev, _page: (prev?._page || 0) - 1 }));
-  }
-  function handleNextClick() {
-    setFilters((prev) => ({ ...prev, _page: (prev?._page || 0) + 1 }));
-  }
+  const { data, isLoading } = useWorkList({ params: filters });
+
+  const { _limit, _page, _totalRows } = data?.pagination || {};
+  const totalPages = Boolean(_totalRows) ? Math.ceil(_totalRows / _limit) : 0;
+
   return (
     <Box>
       <Container>
@@ -39,17 +20,16 @@ export default function WorksPage(props: WorksPageProps) {
             Work
           </Typography>
         </Box>
-        <WorkList workList={workList?.data || []} loading={isLoading} />
-        {!isLoading ? (
-          <Box>
-            <Button variant="contained" color="primary" onClick={handlePreviousClick}>
-              Previous page
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleNextClick}>
-              Next page
-            </Button>
-          </Box>
-        ) : null}
+        <WorkList workList={data?.data || []} loading={isLoading} />
+        {totalPages > 0 && (
+          <Stack alignItems="center">
+            <Pagination
+              count={totalPages}
+              page={_page}
+              onChange={(_, page) => setFilters((prev) => ({ ...prev, _page: page }))}
+            />
+          </Stack>
+        )}
       </Container>
     </Box>
   );
