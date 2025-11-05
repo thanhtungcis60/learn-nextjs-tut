@@ -39,7 +39,7 @@ export default function WorksPage(props: WorksPageProps) {
             Work
           </Typography>
         </Box>
-        {isLoading ? <LinearProgress /> : <WorkList workList={workList?.data} />}
+        <WorkList workList={workList?.data || []} loading={isLoading} />
         {!isLoading ? (
           <Box>
             <Button variant="contained" color="primary" onClick={handlePreviousClick}>
