@@ -1,8 +1,9 @@
 import { workApi } from '@/api-client';
 import { MainLayout } from '@/components/layout';
+import { WorkList } from '@/components/work';
 import { useWorkList } from '@/hooks';
 import { ListParams } from '@/models';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Container, LinearProgress, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 export interface WorksPageProps {}
@@ -24,18 +25,33 @@ export default function WorksPage(props: WorksPageProps) {
   //       }
   //     })();
   //   }, []);
+  function handlePreviousClick() {
+    setFilters((prev) => ({ ...prev, _page: (prev?._page || 0) - 1 }));
+  }
   function handleNextClick() {
     setFilters((prev) => ({ ...prev, _page: (prev?._page || 0) + 1 }));
   }
   return (
-    <div>
-      <p>Works Page</p>
-      <Box>
-        <Button variant="contained" color="primary" onClick={handleNextClick}>
-          Next page
-        </Button>
-      </Box>
-    </div>
+    <Box>
+      <Container>
+        <Box mb={4} mt={8}>
+          <Typography component="h1" variant="h3" fontWeight="bold">
+            Work
+          </Typography>
+        </Box>
+        {isLoading ? <LinearProgress /> : <WorkList workList={workList?.data} />}
+        {!isLoading ? (
+          <Box>
+            <Button variant="contained" color="primary" onClick={handlePreviousClick}>
+              Previous page
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleNextClick}>
+              Next page
+            </Button>
+          </Box>
+        ) : null}
+      </Container>
+    </Box>
   );
 }
 WorksPage.Layout = MainLayout;
