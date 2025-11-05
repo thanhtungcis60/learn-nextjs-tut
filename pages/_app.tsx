@@ -35,7 +35,7 @@ import { ToastContainer } from 'react-toastify';
 const clientSideEmotionCache = createEmotionCache();
 export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props;
-  console.log('App re-render');
+  // console.log('App re-render');
   const Layout = Component.Layout ?? EmptyLayout;
   return (
     // <AppCacheProvider {...props}>

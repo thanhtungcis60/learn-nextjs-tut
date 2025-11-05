@@ -2,8 +2,7 @@ import { authApi } from '@/api-client';
 import { StorageKeys } from '@/constants';
 import { LoginPayload, UserProfile } from '@/models';
 import { useEffect } from 'react';
-import useSWR from 'swr';
-import { PublicConfiguration } from 'swr/_internal';
+import useSWR, { SWRConfiguration } from 'swr';
 
 function getUserInfo(): UserProfile | null {
   try {
@@ -15,7 +14,7 @@ function getUserInfo(): UserProfile | null {
     return null;
   }
 }
-export function useAuth(options?: Partial<PublicConfiguration>) {
+export function useAuth(options?: Partial<SWRConfiguration>) {
   const {
     data: profile,
     error,
@@ -43,7 +42,7 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
   //   }
   // }, []);
 
-  console.log({ profile, error });
+  // console.log({ profile, error });
 
   const firstLoading = profile === undefined && error === undefined;
   async function login(payload: LoginPayload) {
