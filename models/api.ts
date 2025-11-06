@@ -1,7 +1,7 @@
 export interface ListParams {
   _page: number;
   _limit: number;
-  name_like: string;
+  title_like: string;
 }
 export interface Pagination {
   _page: number;

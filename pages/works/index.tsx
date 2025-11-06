@@ -1,7 +1,8 @@
 import { MainLayout } from '@/components/layout';
 import { WorkList } from '@/components/work';
+import { WorkFilters } from '@/components/work/work-filters';
 import { useWorkList } from '@/hooks';
-import { ListParams } from '@/models';
+import { ListParams, WorkFiltersPayload } from '@/models';
 import { Box, Container, Pagination, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 
@@ -12,6 +13,9 @@ export default function WorksPage() {
   const { _limit, _page, _totalRows } = data?.pagination || {};
   const totalPages = Boolean(_totalRows) ? Math.ceil(_totalRows / _limit) : 0;
 
+  function handleFilterChange(newFilters: WorkFiltersPayload) {
+    setFilters((prev) => ({ ...prev, _page: 1, title_like: newFilters.search }));
+  }
   return (
     <Box>
       <Container>
@@ -20,6 +24,7 @@ export default function WorksPage() {
             Work
           </Typography>
         </Box>
+        <WorkFilters onSubmit={handleFilterChange} />
         <WorkList workList={data?.data || []} loading={isLoading} />
         {totalPages > 0 && (
           <Stack alignItems="center">
