@@ -6,10 +6,11 @@ import { InputField } from '../form';
 import { ChangeEvent } from 'react';
 
 export interface WorkFiltersProps {
+  initialValues?: WorkFiltersPayload;
   onSubmit?: (payload: WorkFiltersPayload) => void;
 }
 
-export function WorkFilters({ onSubmit }: WorkFiltersProps) {
+export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
   const {
     control,
     handleSubmit,
@@ -17,6 +18,7 @@ export function WorkFilters({ onSubmit }: WorkFiltersProps) {
   } = useForm<WorkFiltersPayload>({
     defaultValues: {
       search: '',
+      ...initialValues,
     },
   });
   async function handleSearchSubmit(payload: WorkFiltersPayload) {

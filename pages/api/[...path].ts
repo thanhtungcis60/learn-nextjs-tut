@@ -28,9 +28,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       changeOrigin: true,
       selfHandleResponse: false,
     });
-
-    proxy.once('proxyRes', () => {
-      resolve(true);
-    });
   });
 }

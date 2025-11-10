@@ -6,13 +6,16 @@ import useSWR, { SWRConfiguration } from 'swr';
 export interface UseWorkListProps {
   params: Partial<ListParams>;
   options?: SWRConfiguration;
+  enable?: boolean;
 }
-export function useWorkList({ params, options }: UseWorkListProps) {
+export function useWorkList({ params, options, enable = true }: UseWorkListProps) {
   const swrResponse = useSWR(
-    [
-      QueryKeys.GET_WORK_LIST, //tên định danh unique cho cái api này
-      params, //khi params thay đổi thì gọi lại api
-    ],
+    enable
+      ? [
+          QueryKeys.GET_WORK_LIST, //tên định danh unique cho cái api này
+          params, //khi params thay đổi thì gọi lại api
+        ]
+      : null, //Nếu enable = false thì không gọi api
     () => workApi.getAll(params),
     {
       dedupingInterval: 30 * 1000, //Có những request giống nhau trong 30s thì chỉ gọi 1 lần

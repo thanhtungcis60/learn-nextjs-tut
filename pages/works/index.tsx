@@ -4,17 +4,36 @@ import { WorkFilters } from '@/components/work/work-filters';
 import { useWorkList } from '@/hooks';
 import { ListParams, WorkFiltersPayload } from '@/models';
 import { Box, Container, Pagination, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function WorksPage() {
-  const [filters, setFilters] = useState<Partial<ListParams>>({ _page: 1, _limit: 10 });
-  const { data, isLoading } = useWorkList({ params: filters });
+  const router = useRouter();
+  const filters: Partial<ListParams> = { _page: 1, _limit: 10, ...router.query };
+  const initFiltersPayload: WorkFiltersPayload = {
+    search: typeof router.query.title_like === 'string' ? router.query.title_like : '',
+  };
+
+  console.log('page render ', { search: filters.title_like });
+  // const [filters, setFilters] = useState<Partial<ListParams>>({ _page: 1, _limit: 10 });
+  const { data, isLoading } = useWorkList({ params: filters, enable: router.isReady });
 
   const { _limit, _page, _totalRows } = data?.pagination || {};
   const totalPages = Boolean(_totalRows) ? Math.ceil(_totalRows / _limit) : 0;
 
   function handleFilterChange(newFilters: WorkFiltersPayload) {
-    setFilters((prev) => ({ ...prev, _page: 1, title_like: newFilters.search }));
+    // setFilters((prev) => ({ ...prev, _page: 1, title_like: newFilters.search }));
+    router.push(
+      {
+        pathname: '/works',
+        query: {
+          ...filters,
+          _page: 1,
+          title_like: newFilters.search,
+        },
+      },
+      undefined,
+      { shallow: true }, //shallow routing chỉ thay đổi route phía client, không gọi hàm getStaticProps phía server
+    );
   }
   return (
     <Box>
@@ -24,14 +43,26 @@ export default function WorksPage() {
             Work
           </Typography>
         </Box>
-        <WorkFilters onSubmit={handleFilterChange} />
+        {router.isReady && <WorkFilters initialValues={initFiltersPayload} onSubmit={handleFilterChange} />}
         <WorkList workList={data?.data || []} loading={isLoading} />
         {totalPages > 0 && (
           <Stack alignItems="center">
             <Pagination
               count={totalPages}
               page={_page}
-              onChange={(_, page) => setFilters((prev) => ({ ...prev, _page: page }))}
+              onChange={(_, page) =>
+                router.push(
+                  {
+                    pathname: '/works',
+                    query: {
+                      ...filters,
+                      _page: page,
+                    },
+                  },
+                  undefined,
+                  { shallow: true }, //shallow routing chỉ thay đổi route phía client, không gọi hàm getStaticProps phía server
+                )
+              }
             />
           </Stack>
         )}
