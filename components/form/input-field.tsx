@@ -1,5 +1,5 @@
 import { TextField, TextFieldProps } from '@mui/material';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { Control, useController } from 'react-hook-form';
 export type InputFieldProps = TextFieldProps & {
   name: string;

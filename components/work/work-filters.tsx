@@ -2,7 +2,7 @@ import { WorkFiltersPayload } from '@/models';
 import { Search } from '@mui/icons-material';
 import { Box, debounce, InputAdornment } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { InputField } from '../form';
+import { AutoCompleteField, InputField } from '../form';
 import { ChangeEvent } from 'react';
 
 export interface WorkFiltersProps {
@@ -47,6 +47,8 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
           debounceSeachChange();
         }}
       />
+
+      <AutoCompleteField name="taglist_search" placeholder="filter by category" control={control} />
     </Box>
   );
 }
