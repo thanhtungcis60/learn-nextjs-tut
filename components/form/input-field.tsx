@@ -1,14 +1,14 @@
+'use client';
+
 import { TextField, TextFieldProps } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { Control, useController } from 'react-hook-form';
-export type InputFieldProps = TextFieldProps & {
-  name: string;
-  label?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
+export type InputFieldProps<T extends FieldValues> = TextFieldProps & {
+  name: Path<T>;
+  control: Control<T>;
 };
 
-export function InputField({
+export function InputField<T extends FieldValues>({
   name,
   control,
   onChange: externalOnchange,
@@ -16,7 +16,7 @@ export function InputField({
   ref: externalRef,
   value: externalValue,
   ...rest
-}: InputFieldProps) {
+}: InputFieldProps<T>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },

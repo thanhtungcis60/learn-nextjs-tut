@@ -1,21 +1,25 @@
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { TextField } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
-import { Control, useController } from 'react-hook-form';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export type AutoCompleteFieldProps = {
-  name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
+export type AutoCompleteFieldProps<T, K extends FieldValues> = Partial<
+  AutocompleteProps<T, boolean, boolean, boolean>
+> & {
+  name: Path<K>;
+  control: Control<K>;
   placeholder?: string;
+  label?: string;
+  options: T[];
+  getOtpionLabel: (option: T) => string;
 };
 
-export function AutoCompleteField({
+export function AutoCompleteField<T, K extends FieldValues>({
   name,
   control,
   // onChange: externalOnchange,
@@ -23,8 +27,12 @@ export function AutoCompleteField({
   // ref: externalRef,
   // value: externalValue,
   placeholder,
+  label,
+  options,
+  getOtpionLabel,
+  isOptionEqualToValue,
   ...rest
-}: AutoCompleteFieldProps) {
+}: AutoCompleteFieldProps<T, K>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },
@@ -40,17 +48,18 @@ export function AutoCompleteField({
       fullWidth
       size="small"
       id="checkboxes-tags-demo"
-      options={top100Films}
+      options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.title}
+      isOptionEqualToValue={isOptionEqualToValue}
+      getOptionLabel={getOtpionLabel}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-          {option.title}
+          {getOtpionLabel(option) || '-'}
         </li>
       )}
       renderInput={(params) => (
-        <TextField margin="normal" {...params} label="Filter by category" placeholder={placeholder} />
+        <TextField margin="normal" {...params} label={label} placeholder={placeholder} />
       )}
     />
   );

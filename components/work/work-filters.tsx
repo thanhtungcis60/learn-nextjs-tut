@@ -3,7 +3,7 @@ import { Search } from '@mui/icons-material';
 import { Box, debounce, InputAdornment } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { AutoCompleteField, InputField } from '../form';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 
 export interface WorkFiltersProps {
   initialValues?: WorkFiltersPayload;
@@ -48,7 +48,24 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
         }}
       />
 
-      <AutoCompleteField name="taglist_search" placeholder="filter by category" control={control} />
+      <AutoCompleteField
+        name="selectedTagList"
+        label="Filter by category"
+        placeholder="Categories"
+        control={control}
+        options={[{ title: 'easy', key: 'ez' }]}
+        getOtpionLabel={(otion) => otion.key}
+        isOptionEqualToValue={(option, value) => option.key === value.key}
+      />
+
+      {/* <AutoCompleteField
+        name="taglist_search"
+        label="Filter by category"
+        placeholder="filter by category"
+        control={control}
+        options={['easy', 'frontend']}
+        getOtpionLabel={(otion) => otion}
+      /> */}
     </Box>
   );
 }
