@@ -11,7 +11,7 @@ export function WorkCard({ work }: WorkCardProps) {
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
       <Box width={{ xs: '100%', sm: '246px' }} flexShrink={0}>
-        <Image src={work.thumbnailUrl} width={246} height={180} layout="responsive" alt="work thumbnail" />
+        <Image src={work.thumbnailUrl} width={246} height={180} alt="work thumbnail" />
       </Box>
       <Box>
         <Typography variant="h4" fontWeight="bold">

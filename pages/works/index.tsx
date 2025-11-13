@@ -13,7 +13,7 @@ export default function WorksPage() {
     search: typeof router.query.title_like === 'string' ? router.query.title_like : '',
   };
 
-  console.log('page render ', { search: filters.title_like });
+  // console.log('page render ', { search: filters.title_like });
   // const [filters, setFilters] = useState<Partial<ListParams>>({ _page: 1, _limit: 10 });
   const { data, isLoading } = useWorkList({ params: filters, enable: router.isReady });
 

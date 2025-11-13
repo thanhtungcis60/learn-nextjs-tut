@@ -11,7 +11,7 @@ export interface Work {
 
 export interface WorkFiltersPayload {
   search: string;
-  taglist_search: string;
+  taglist_search?: string;
 
   selectedTagList?: string[]; //temp value to store autocomplete, not send to API
 }

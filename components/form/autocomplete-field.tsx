@@ -17,15 +17,13 @@ export type AutoCompleteFieldProps<T, K extends FieldValues> = Partial<
   label?: string;
   options: T[];
   getOtpionLabel: (option: T) => string;
+  onChange: (selectedOptions: T[]) => void;
 };
 
 export function AutoCompleteField<T, K extends FieldValues>({
   name,
   control,
-  // onChange: externalOnchange,
-  // onBlur: externalOnBlur,
-  // ref: externalRef,
-  // value: externalValue,
+  onChange: externalOnchange,
   placeholder,
   label,
   options,
@@ -52,15 +50,32 @@ export function AutoCompleteField<T, K extends FieldValues>({
       disableCloseOnSelect
       isOptionEqualToValue={isOptionEqualToValue}
       getOptionLabel={getOtpionLabel}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-          {getOtpionLabel(option) || '-'}
-        </li>
-      )}
+      renderOption={(props, option, { selected }) => {
+        const { key, ...optionProps } = props;
+        return (
+          <li key={key} {...optionProps}>
+            <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+            {getOtpionLabel(option) || '-'}
+          </li>
+        );
+      }}
       renderInput={(params) => (
-        <TextField margin="normal" {...params} label={label} placeholder={placeholder} />
+        <TextField
+          margin="normal"
+          {...params}
+          label={label}
+          placeholder={placeholder}
+          error={!!error}
+          helperText={error?.message}
+        />
       )}
+      onChange={(event, value) => {
+        onChange(value);
+        externalOnchange?.(value as T[]);
+      }}
+      onBlur={onBlur}
+      value={value}
+      ref={ref}
     />
   );
 }

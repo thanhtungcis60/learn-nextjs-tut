@@ -18,11 +18,12 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
   } = useForm<WorkFiltersPayload>({
     defaultValues: {
       search: '',
+      selectedTagList: [],
       ...initialValues,
     },
   });
   async function handleSearchSubmit(payload: WorkFiltersPayload) {
-    console.log('payload: ', payload);
+    console.log('handleSearchSubmit.payload: ', payload);
     await onSubmit?.(payload);
   }
 
@@ -43,7 +44,7 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
             ),
           },
         }}
-        onChange={() => {
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
           debounceSeachChange();
         }}
       />
@@ -53,9 +54,13 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
         label="Filter by category"
         placeholder="Categories"
         control={control}
-        options={[{ title: 'easy', key: 'ez' }]}
+        options={[
+          { title: 'easy', key: 'ez' },
+          { title: 'frontend', key: 'fr' },
+        ]}
         getOtpionLabel={(otion) => otion.key}
         isOptionEqualToValue={(option, value) => option.key === value.key}
+        onChange={() => debounceSeachChange()}
       />
 
       {/* <AutoCompleteField
