@@ -4,6 +4,7 @@ import { Box, debounce, InputAdornment } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { AutoCompleteField, InputField } from '../form';
 import { ChangeEvent, useMemo } from 'react';
+import { useTagList } from '@/hooks';
 
 export interface WorkFiltersProps {
   initialValues?: WorkFiltersPayload;
@@ -11,6 +12,8 @@ export interface WorkFiltersProps {
 }
 
 export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
+  const { data } = useTagList({});
+  const tagList = data?.data || [];
   const {
     control,
     handleSubmit,
@@ -54,12 +57,9 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
         label="Filter by category"
         placeholder="Categories"
         control={control}
-        options={[
-          { title: 'easy', key: 'ez' },
-          { title: 'frontend', key: 'fr' },
-        ]}
-        getOtpionLabel={(otion) => otion.key}
-        isOptionEqualToValue={(option, value) => option.key === value.key}
+        options={tagList}
+        getOtpionLabel={(option) => option}
+        isOptionEqualToValue={(option, value) => option === value}
         onChange={() => debounceSeachChange()}
       />
 

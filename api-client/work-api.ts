@@ -1,4 +1,4 @@
-import { ListParams, ListResponse, LoginPayload, Work } from '@/models';
+import { ListParams, ListResponse, Work } from '@/models';
 import axiosClient from './axios-client';
 
 export const workApi = {
