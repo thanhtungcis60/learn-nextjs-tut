@@ -10,7 +10,8 @@ export default function WorksPage() {
   const router = useRouter();
   const filters: Partial<ListParams> = { _page: 1, _limit: 10, ...router.query };
   const initFiltersPayload: WorkFiltersPayload = {
-    search: typeof router.query.title_like === 'string' ? router.query.title_like : '',
+    search: filters.title_like || '',
+    selectedTagList: filters.tagList_like?.split('|') || [],
   };
 
   // console.log('page render ', { search: filters.title_like });
@@ -29,6 +30,7 @@ export default function WorksPage() {
           ...filters,
           _page: 1,
           title_like: newFilters.search,
+          tagList_like: newFilters.tagList_like,
         },
       },
       undefined,

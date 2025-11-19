@@ -27,6 +27,9 @@ export function WorkFilters({ initialValues, onSubmit }: WorkFiltersProps) {
   });
   async function handleSearchSubmit(payload: WorkFiltersPayload) {
     console.log('handleSearchSubmit.payload: ', payload);
+    if (!payload) return;
+    payload.tagList_like = payload.selectedTagList?.join('|') || '';
+    delete payload.selectedTagList;
     await onSubmit?.(payload);
   }
 
