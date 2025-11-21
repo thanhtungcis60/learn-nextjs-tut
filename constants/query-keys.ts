@@ -1,4 +1,5 @@
 export const QueryKeys = {
-  GET_WORK_LIST: 'user_info',
-  GET_TAG_LIST: 'user_info',
+  GET_WORK_LIST: 'GET_WORK_LIST',
+  GET_TAG_LIST: 'GET_TAG_LIST',
+  GET_TAG_Detail: 'GET_TAG_Detail',
 };

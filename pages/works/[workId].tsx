@@ -1,4 +1,6 @@
 import { MainLayout } from '@/components/layout';
+import { WorkList } from '@/components/work';
+import { useWorkDetails } from '@/hooks';
 import { Box, Container, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -6,14 +8,19 @@ export default function AddEditWorkPage() {
   const router = useRouter();
   const { workId } = router.query;
   const isAddMode = workId === 'add';
-  console.log({ workId, ready: router.isReady });
 
+  const { data, isLoading } = useWorkDetails({
+    workId: (workId as string) || '',
+    enable: router.isReady && !isAddMode,
+  });
+
+  console.log({ workId, ready: router.isReady, data, isLoading });
   return (
     <Box>
       <Container>
         <Box mb={4} mt={8}>
           <Typography component="h1" variant="h3" fontWeight="bold">
-            {isAddMode ? 'Add Work Page' : 'Edit Work Page'}
+            {isAddMode ? 'Add Work Page' : `Edit Work #${workId}`}
           </Typography>
         </Box>
         <Box>Lorem IPSUM</Box>
