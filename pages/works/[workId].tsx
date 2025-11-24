@@ -1,5 +1,6 @@
 import { MainLayout } from '@/components/layout';
 import { WorkList } from '@/components/work';
+import { WorkForm } from '@/components/work/work-form';
 import { useWorkDetails } from '@/hooks';
 import { Box, Container, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -14,7 +15,7 @@ export default function AddEditWorkPage() {
     enable: router.isReady && !isAddMode,
   });
 
-  console.log({ workId, ready: router.isReady, data, isLoading });
+  console.log('Boolean(data):', Boolean(data));
   return (
     <Box>
       <Container>
@@ -24,6 +25,7 @@ export default function AddEditWorkPage() {
           </Typography>
         </Box>
         <Box>Lorem IPSUM</Box>
+        <Box>{(isAddMode || Boolean(data)) && <WorkForm initialValues={data} onSubmit={() => {}} />}</Box>
       </Container>
     </Box>
   );
