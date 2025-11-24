@@ -3,7 +3,7 @@ import { WorkPayload } from '@/models';
 import { Box, Button } from '@mui/material';
 import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { InputField } from '../form';
+import { AutoCompleteField, InputField } from '../form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 export interface WorkFormProps {
@@ -15,6 +15,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
   const schema = yup.object().shape({
     title: yup.string().required('please enter work title'),
     shortDescription: yup.string().required('please enter work description'),
+    tagList: yup.array().of(yup.string()).min(1, 'Please select at least one category'),
   });
 
   const { data } = useTagList({});
@@ -23,6 +24,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
     defaultValues: {
       title: '',
       shortDescription: '',
+      tagList: [],
       ...initialValues,
     },
     resolver: yupResolver(schema) as Resolver<Partial<WorkPayload>>,
@@ -49,16 +51,16 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
         }}
       />
 
-      {/* <AutoCompleteField
-        name="selectedTagList"
-        label="Filter by category"
-        placeholder="Categories"
+      <AutoCompleteField
+        name="tagList"
+        label="Categories"
         control={control}
         options={tagList}
-        getOtpionLabel={(option) => option}
-        isOptionEqualToValue={(option, value) => option === value}
-        onChange={() => debounceSeachChange()}
-      /> */}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        getOtpionLabel={(option: any) => option}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        isOptionEqualToValue={(option: any, value: any) => option === value}
+      />
       <Button variant="contained" type="submit" size="medium">
         {Boolean(initialValues?.id) ? 'Save' : 'Submit'}
       </Button>

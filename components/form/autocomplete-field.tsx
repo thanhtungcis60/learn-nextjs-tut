@@ -17,7 +17,7 @@ export type AutoCompleteFieldProps<T, K extends FieldValues> = Partial<
   label?: string;
   options: T[];
   getOtpionLabel: (option: T) => string;
-  onChange: (selectedOptions: T[]) => void;
+  onChange?: (selectedOptions: T[]) => void;
 };
 
 export function AutoCompleteField<T, K extends FieldValues>({
