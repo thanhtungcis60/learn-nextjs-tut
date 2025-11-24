@@ -37,6 +37,16 @@ export default function WorksPage() {
       { shallow: true }, //shallow routing chỉ thay đổi route phía client, không gọi hàm getStaticProps phía server
     );
   }
+  function handleClickWorkCard(id: string) {
+    // setFilters((prev) => ({ ...prev, _page: 1, title_like: newFilters.search }));
+    router.push(
+      {
+        pathname: `/works/${id}`,
+      },
+      undefined,
+      { shallow: true }, //shallow routing chỉ thay đổi route phía client, không gọi hàm getStaticProps phía server
+    );
+  }
   return (
     <Box>
       <Container>
@@ -50,7 +60,11 @@ export default function WorksPage() {
         ) : (
           <Skeleton width="100%" height={40} sx={{ display: 'inline-block', mt: 2, mb: 1 }} />
         )}
-        <WorkList workList={data?.data || []} loading={!router.isReady || isLoading} />
+        <WorkList
+          workList={data?.data || []}
+          loading={!router.isReady || isLoading}
+          onWorkCardClick={handleClickWorkCard}
+        />
         {totalPages > 0 && (
           <Stack alignItems="center">
             <Pagination

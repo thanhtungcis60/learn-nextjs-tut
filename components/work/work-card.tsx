@@ -6,12 +6,20 @@ import React, { useState } from 'react';
 
 export interface WorkCardProps {
   work: Work;
+  onWorkCardClick(id: string): void;
 }
 
-export function WorkCard({ work }: WorkCardProps) {
+export function WorkCard({ work, onWorkCardClick }: WorkCardProps) {
   const [imgSrc, setImgSrc] = useState<string | StaticImageData>(work.thumbnailUrl);
   return (
-    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+    <Stack
+      direction={{ xs: 'column', sm: 'row' }}
+      spacing={2}
+      sx={{ cursor: 'pointer' }}
+      onClick={() => {
+        if (onWorkCardClick) onWorkCardClick(work?.id);
+      }}
+    >
       <Box width={{ xs: '100%', sm: '246px' }} flexShrink={0}>
         <Image
           src={imgSrc}

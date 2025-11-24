@@ -13,7 +13,7 @@ export type PhotoFieldProps<T extends FieldValues> = TextFieldProps & {
 
 export function PhotoField<T extends FieldValues>({ name, control, label, ...rest }: PhotoFieldProps<T>) {
   const {
-    field: { onChange, onBlur, value, ref },
+    field: { onChange, value, ref },
     fieldState: { error },
   } = useController({
     name,
@@ -24,8 +24,9 @@ export function PhotoField<T extends FieldValues>({ name, control, label, ...res
     if (!file) return;
 
     const url = URL.createObjectURL(file);
-    console.log({ url });
+    // console.log({ url, file });
     onChange({
+      //onChange của react hook form, khi chạy vào đây nó sẽ trigger re render lại form, đồng thời value chính là object đã truyền vào onChange
       file,
       previewUrl: url,
     });

@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import { AutoCompleteField, InputField } from '../form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PhotoField } from '../form/photo-field';
+import { UPLOAD_IMG_MAX_SIZE } from '@/constants';
+import { MultilineChart } from '@mui/icons-material';
 
 export interface WorkFormProps {
   initialValues?: Partial<WorkPayload>;
@@ -17,6 +19,24 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
     title: yup.string().required('please enter work title'),
     shortDescription: yup.string().required('please enter work description'),
     tagList: yup.array().of(yup.string()).min(1, 'Please select at least one category'),
+    thumbnail: yup
+      .object()
+      .nullable()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .test('test-required', 'Please select an image.', (value: any, context: any) => {
+        //required when add
+        //optional when edit
+        if (Boolean(initialValues?.id) || Boolean(value?.file)) return true;
+        // return context.createError({ message: 'Please select an image.' });//Tạo custom error message
+        return false;
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .test('test-size', 'Maximum size exceeded. Please select another file', (value: any, context: any) => {
+        //limit size to 3 MB
+        console.log({ value, context });
+        const fileSize = value?.file?.['size'] || 0;
+        return fileSize <= UPLOAD_IMG_MAX_SIZE;
+      }),
   });
 
   const { data } = useTagList({});
@@ -26,7 +46,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
       title: '',
       shortDescription: '',
       tagList: [],
-      thumbnail: null,
+      thumbnail: initialValues?.id ? { file: null, previewUrl: initialValues?.thumbnailUrl } : null,
       ...initialValues,
     },
     resolver: yupResolver(schema) as Resolver<Partial<WorkPayload>>,
