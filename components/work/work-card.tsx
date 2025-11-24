@@ -1,17 +1,25 @@
+import { DEFAULT_THUMBNAIL_URL } from '@/constants';
 import { Work } from '@/models';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import Image from 'next/image';
-import * as React from 'react';
+import Image, { StaticImageData } from 'next/image';
+import React, { useState } from 'react';
 
 export interface WorkCardProps {
   work: Work;
 }
 
 export function WorkCard({ work }: WorkCardProps) {
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(work.thumbnailUrl);
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
       <Box width={{ xs: '100%', sm: '246px' }} flexShrink={0}>
-        <Image src={work.thumbnailUrl} width={246} height={180} alt="work thumbnail" />
+        <Image
+          src={imgSrc}
+          width={246}
+          height={180}
+          alt="work thumbnail"
+          onError={() => setImgSrc(DEFAULT_THUMBNAIL_URL)}
+        />
       </Box>
       <Box>
         <Typography variant="h4" fontWeight="bold">

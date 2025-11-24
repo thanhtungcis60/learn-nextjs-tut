@@ -5,6 +5,7 @@ import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { AutoCompleteField, InputField } from '../form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { PhotoField } from '../form/photo-field';
 
 export interface WorkFormProps {
   initialValues?: Partial<WorkPayload>;
@@ -25,6 +26,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
       title: '',
       shortDescription: '',
       tagList: [],
+      thumbnail: null,
       ...initialValues,
     },
     resolver: yupResolver(schema) as Resolver<Partial<WorkPayload>>,
@@ -61,6 +63,9 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         isOptionEqualToValue={(option: any, value: any) => option === value}
       />
+
+      <PhotoField name="thumbnail" control={control} label="Thumbnail" />
+
       <Button variant="contained" type="submit" size="medium">
         {Boolean(initialValues?.id) ? 'Save' : 'Submit'}
       </Button>

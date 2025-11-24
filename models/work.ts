@@ -8,7 +8,12 @@ export interface Work {
   updatedAt: string;
   thumbnailUrl: string;
 }
-export interface WorkPayload extends Work {}
+export interface WorkPayload extends Work {
+  thumbnail: null | {
+    file: File;
+    previewUrl: string;
+  };
+}
 
 export interface WorkFiltersPayload {
   search: string;
