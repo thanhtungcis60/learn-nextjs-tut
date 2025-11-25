@@ -92,7 +92,24 @@
 import { Box, FormHelperText, TextFieldProps, Typography } from '@mui/material';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import dynamic from 'next/dynamic';
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import { useEffect, useRef } from 'react';
+import ReactQuill, { ReactQuillProps } from 'react-quill';
+import type { LegacyRef } from 'react';
+// const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+interface ReactQuillWrapperProps extends ReactQuillProps {
+  forwardedRef: LegacyRef<ReactQuill>;
+}
+const ReactQuillWrapper = dynamic(
+  async () => {
+    const { default: RQ } = await import('react-quill');
+    const Component = ({ forwardedRef, ...props }: ReactQuillWrapperProps) => {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+    return Component;
+  },
+  { ssr: false },
+);
 import 'react-quill/dist/quill.snow.css';
 
 // const MUIRichTextEditor = dynamic(() => import('mui-rte'), { ssr: false });
@@ -111,6 +128,10 @@ export function EditorField<T extends FieldValues>({ name, control, label }: Edi
     control,
   });
 
+  const editorRef = useRef(null);
+  useEffect(() => {
+    console.log({ editorRef });
+  }, []);
   const modules = {
     toolbar: {
       container: [
@@ -146,7 +167,8 @@ export function EditorField<T extends FieldValues>({ name, control, label }: Edi
     <Box sx={{ my: 1.5 }}>
       <Typography variant="body2">{label}</Typography>
       <Box>
-        <ReactQuill
+        <ReactQuillWrapper
+          forwardedRef={editorRef}
           theme="snow"
           modules={modules}
           formats={formats}
