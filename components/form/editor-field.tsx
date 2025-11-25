@@ -1,3 +1,4 @@
+//#region react-draft-wysiwyg
 // 'use client';
 
 // import { Box, FormHelperText, TextFieldProps, Typography } from '@mui/material';
@@ -84,6 +85,7 @@
 //     </Box>
 //   );
 // }
+//#endregion react-draft-wysiwyg
 
 'use client';
 
@@ -144,7 +146,15 @@ export function EditorField<T extends FieldValues>({ name, control, label }: Edi
     <Box sx={{ my: 1.5 }}>
       <Typography variant="body2">{label}</Typography>
       <Box>
-        <ReactQuill theme="snow" modules={modules} formats={formats} />
+        <ReactQuill
+          theme="snow"
+          modules={modules}
+          formats={formats}
+          value={value}
+          onChange={(content) => {
+            onChange(content);
+          }}
+        />
       </Box>
       <FormHelperText error={!!error}>{error?.message}</FormHelperText>
     </Box>
