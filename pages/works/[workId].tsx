@@ -1,9 +1,9 @@
 import { MainLayout } from '@/components/layout';
-import { WorkList } from '@/components/work';
 import { WorkForm } from '@/components/work/work-form';
 import { useWorkDetails } from '@/hooks';
 import { Box, Container, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 
 export default function AddEditWorkPage() {
   const router = useRouter();
@@ -27,6 +27,7 @@ export default function AddEditWorkPage() {
         <Box>Lorem IPSUM</Box>
         <Box>{(isAddMode || Boolean(data)) && <WorkForm initialValues={data} onSubmit={() => {}} />}</Box>
       </Container>
+      <Script src="https://widget.cloudinary.com/v2.0/global/all.js" strategy="afterInteractive"></Script>
     </Box>
   );
 }
