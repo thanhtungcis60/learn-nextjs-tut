@@ -1,13 +1,11 @@
 import { useTagList } from '@/hooks';
 import { WorkPayload } from '@/models';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button } from '@mui/material';
 import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { AutoCompleteField, InputField } from '../form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { PhotoField } from '../form/photo-field';
+import { AutoCompleteField, EditorField, InputField, PhotoField } from '../form';
 import { UPLOAD_IMG_MAX_SIZE } from '@/constants';
-import { MultilineChart } from '@mui/icons-material';
 
 export interface WorkFormProps {
   initialValues?: Partial<WorkPayload>;
@@ -47,6 +45,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
       shortDescription: '',
       tagList: [],
       thumbnail: initialValues?.id ? { file: null, previewUrl: initialValues?.thumbnailUrl } : null,
+      fullDescription: '',
       ...initialValues,
     },
     resolver: yupResolver(schema) as Resolver<Partial<WorkPayload>>,
@@ -85,6 +84,7 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
       />
 
       <PhotoField name="thumbnail" control={control} label="Thumbnail" />
+      <EditorField name="fullDescription" control={control} label="Full Description" />
 
       <Button variant="contained" type="submit" size="medium">
         {Boolean(initialValues?.id) ? 'Save' : 'Submit'}

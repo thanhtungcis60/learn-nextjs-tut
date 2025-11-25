@@ -1,7 +1,7 @@
 'use client';
 
 import { DEFAULT_THUMBNAIL_URL } from '@/constants';
-import { Box, FormHelperText, TextField, TextFieldProps, Typography } from '@mui/material';
+import { Box, FormHelperText, TextFieldProps, Typography } from '@mui/material';
 import Image from 'next/image';
 import { ChangeEvent } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { Control, FieldValues, Path, useController } from 'react-hook-form';
 export type PhotoFieldProps<T extends FieldValues> = TextFieldProps & {
   name: Path<T>;
   control: Control<T>;
+  label?: string;
 };
 
 export function PhotoField<T extends FieldValues>({ name, control, label, ...rest }: PhotoFieldProps<T>) {
@@ -36,7 +37,7 @@ export function PhotoField<T extends FieldValues>({ name, control, label, ...res
   //value có giá trị là:
   //-null
   //-{file:File, previewUrl:string}
-  const previewUrl = value?.previewUrl || DEFAULT_THUMBNAIL_URL;
+  const previewUrl = value?.['previewUrl'] || DEFAULT_THUMBNAIL_URL;
   const inputId = `photo-field-${name}`;
 
   // render whatever you want: MUI, Ant Design, Bootstrap, Custom UI

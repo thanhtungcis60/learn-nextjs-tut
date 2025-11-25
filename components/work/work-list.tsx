@@ -9,7 +9,7 @@ import { WorkSkeleton } from './work-skeleton';
 export interface WorkListProps {
   workList: Work[];
   loading?: boolean;
-  onWorkCardClick(id: string): void;
+  onWorkCardClick?(id: string): void;
 }
 
 export function WorkList({ workList, loading, onWorkCardClick }: WorkListProps) {
@@ -34,7 +34,7 @@ export function WorkList({ workList, loading, onWorkCardClick }: WorkListProps) 
     <Box>
       {workList.map((work) => (
         <Fragment key={work.id}>
-          <WorkCard work={work} onWorkCardClick={onWorkCardClick} />
+          <WorkCard work={work} onWorkCardClick={() => onWorkCardClick && onWorkCardClick(work.id)} />
           <Divider sx={{ my: 3 }} />
         </Fragment>
       ))}
