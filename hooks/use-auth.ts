@@ -23,7 +23,7 @@ export function useAuth(options?: Partial<SWRConfiguration>) {
     dedupingInterval: 60 * 60 * 1000, //tự động revalidate trong 1h
     revalidateOnFocus: false, //qua tab khac ko can revalidate
     ...options,
-    fallbackData: getUserInfo(),
+    fallbackData: typeof window !== 'undefined' ? getUserInfo() : undefined,
     onSuccess(data, key, config) {
       //save user info to local storage
       localStorage.setItem(StorageKeys.USER_INFO, JSON.stringify(data));
