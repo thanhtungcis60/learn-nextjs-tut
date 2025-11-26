@@ -22,6 +22,10 @@ export default function WorksPage() {
 
   const { _limit, _page, _totalRows } = data?.pagination || {};
   const totalPages = Boolean(_totalRows) ? Math.ceil(_totalRows / _limit) : 0;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   function handleFilterChange(newFilters: WorkFiltersPayload) {
     // setFilters((prev) => ({ ...prev, _page: 1, title_like: newFilters.search }));
@@ -56,7 +60,7 @@ export default function WorksPage() {
           <Typography component="h1" variant="h3" fontWeight="bold">
             Work
           </Typography>
-          {isLoggedIn && (
+          {mounted && isLoggedIn && (
             <Button variant="contained" size="small" onClick={() => router.push('/works/add')}>
               Add new work
             </Button>

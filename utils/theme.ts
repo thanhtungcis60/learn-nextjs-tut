@@ -91,6 +91,14 @@ const baseTheme = createTheme({
             fontSize: '16px',
           },
         },
+        {
+          props: { color: 'primary' },
+          style: {
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        },
       ],
     },
   },
