@@ -31,7 +31,6 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .test('test-size', 'Maximum size exceeded. Please select another file', (value: any, context: any) => {
         //limit size to 3 MB
-        console.log({ value, context });
         const fileSize = value?.file?.['size'] || 0;
         return fileSize <= UPLOAD_IMG_MAX_SIZE;
       }),
@@ -50,10 +49,11 @@ export function WorkForm({ initialValues, onSubmit }: WorkFormProps) {
     },
     resolver: yupResolver(schema) as Resolver<Partial<WorkPayload>>,
   });
-  async function handleFormSubmit(payload: Partial<WorkPayload>) {
-    console.log('form submit.payload: ', payload);
-
-    // await onSubmit?.(payload);
+  async function handleFormSubmit(formValues: Partial<WorkPayload>) {
+    if (!formValues) return;
+    console.log({ formValues });
+    const payload = { ...formValues, thumbnailUrl: formValues.thumbnail?.['previewUrl'] };
+    await onSubmit?.(payload);
   }
 
   return (

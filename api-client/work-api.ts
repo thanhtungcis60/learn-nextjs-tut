@@ -1,4 +1,4 @@
-import { ListParams, ListResponse, Work } from '@/models';
+import { ListParams, ListResponse, Work, WorkPayload } from '@/models';
 import axiosClient from './axios-client';
 
 export const workApi = {
@@ -8,5 +8,12 @@ export const workApi = {
   },
   get(id: string): Promise<Work> {
     return axiosClient.get(`/works/${id}`);
+  },
+  add(payload: Partial<WorkPayload>): Promise<Work> {
+    return axiosClient.post('/works', payload);
+  },
+
+  update(payload: Partial<WorkPayload>): Promise<Work> {
+    return axiosClient.patch(`/works/${payload.id}`, payload);
   },
 };

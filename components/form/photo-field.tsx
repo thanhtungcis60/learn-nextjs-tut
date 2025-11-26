@@ -3,7 +3,7 @@
 import { DEFAULT_THUMBNAIL_URL } from '@/constants';
 import { Box, FormHelperText, TextFieldProps, Typography } from '@mui/material';
 import Image from 'next/image';
-import { ChangeEvent } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 export type PhotoFieldProps<T extends FieldValues> = TextFieldProps & {
@@ -20,43 +20,98 @@ export function PhotoField<T extends FieldValues>({ name, control, label, ...res
     name,
     control,
   });
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const widgetRef = useRef<any>(null);
 
-    const url = URL.createObjectURL(file);
-    // console.log({ url, file });
-    onChange({
-      //onChange của react hook form, khi chạy vào đây nó sẽ trigger re render lại form, đồng thời value chính là object đã truyền vào onChange
-      file,
-      previewUrl: url,
-    });
-  }
+  useEffect(() => {
+    function initCloudinaryWidget() {
+      //@ts-expect-error no type def support yet
+      if (!window.cloudinary) {
+        setTimeout(() => initCloudinaryWidget(), 500); //Chờ 500ms rồi gọi lại chính hàm này khi mà window.cloudinary chưa load kịp
+        return;
+      }
+      // create Cloudinary widget on client
+      if (typeof window === 'undefined') return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cloud = (window as any).cloudinary;
+      if (!cloud) return;
+
+      const myWidget = cloud.createUploadWidget(
+        {
+          cloudName: 'dvrntpyit',
+          uploadPreset: 'easy-frontend',
+          multiple: false,
+          clientAllowedFormats: ['image'],
+          maxImageFileSize: 200000,
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error: any, result: any) => {
+          if (!error && result && result.event === 'success') {
+            const secureUrl = result.info.secure_url;
+            // update form value with uploaded image info
+            onChange({ file: result.info, previewUrl: secureUrl });
+          }
+        },
+      );
+      widgetRef.current = myWidget;
+    }
+    initCloudinaryWidget();
+  }, [onChange]);
+
+  const openWidget = useCallback(() => {
+    if (widgetRef.current) widgetRef.current.open();
+  }, []);
 
   //value data, type
   //value có giá trị là:
   //-null
   //-{file:File, previewUrl:string}
   const previewUrl = value?.['previewUrl'] || DEFAULT_THUMBNAIL_URL;
-  const inputId = `photo-field-${name}`;
 
   // render whatever you want: MUI, Ant Design, Bootstrap, Custom UI
   return (
     <Box sx={{ my: 1.5 }}>
       <Typography variant="body2">{label}</Typography>
-      {/* Thẻ htmlFor để khi người dùng ấn vào ảnh sẽ tự trigger click vào nút chọn file ở dưới */}
-      <Box component="label" htmlFor={inputId} sx={{ cursor: 'pointer' }} ref={ref}>
+      {/* Click the image to open Cloudinary upload widget */}
+      <Box
+        onClick={openWidget}
+        sx={{
+          position: 'relative',
+          display: 'inline-block',
+          cursor: 'pointer',
+          '&:hover .changeOverlay': {
+            opacity: 1,
+          },
+        }}
+      >
         <Image src={previewUrl} width={246} height={180} layout="fixed" alt="work thumbnail" />
+        <Box
+          className="changeOverlay"
+          sx={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            bgcolor: 'rgba(0,0,0,0.6)',
+            color: '#fff',
+            textAlign: 'center',
+            py: 0.5,
+            fontSize: '0.875rem',
+            opacity: 0,
+            transition: 'opacity 200ms ease-in-out',
+            borderBottomLeftRadius: 4,
+            borderBottomRightRadius: 4,
+          }}
+        >
+          Change
+        </Box>
       </Box>
       <FormHelperText error={!!error}>{error?.message}</FormHelperText>
-      <Box
-        id={inputId}
-        component="input"
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        hidden
-      ></Box>
+      {/* <Box sx={{ mt: 1 }} hidden>
+        <Button variant="outlined" size="small" onClick={openWidget}>
+          Change Image
+        </Button>
+      </Box> */}
     </Box>
   );
 }

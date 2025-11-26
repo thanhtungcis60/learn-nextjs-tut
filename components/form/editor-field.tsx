@@ -132,36 +132,44 @@ export function EditorField<T extends FieldValues>({ name, control, label }: Edi
   const cloudinaryWidgetRef = useRef(null);
 
   useEffect(() => {
-    //@ts-expect-error no type def support yet
-    const myWidget = window.cloudinary.createUploadWidget(
-      {
-        cloudName: 'dvrntpyit',
-        uploadPreset: 'easy-frontend',
-        multiple: false, // restrict upload to a single file
-        clientAllowedFormats: ['image'], // restrict uploading to image files only
-        maxImageFileSize: 200000, // restrict file size to less than 2MB
-        // sources: ["local", "url"], // restrict the upload sources to URL and local files
-        // folder: "user_images", // upload files to the specified folder
-        // tags: ["users", "profile"], // add the given tags to the uploaded files
-        // context: { alt: "user_uploaded" }, // add the given context data to the uploaded files
-        // maxWidth: 2000, // Scales the image down to a width of 2000 pixels before uploading
-        // theme: "purple", // Change to a purple theme
-      },
-      //@ts-expect-error no type support yet
-      (error, result) => {
-        if (!error && result && result.event === 'success') {
-          const quill = editorRef.current;
-          //@ts-expect-error no type support yet
-          const range = quill?.getEditorSelection?.();
-          console.log({ quill, range });
-          if (quill && range) {
+    function initCloudinaryWidget() {
+      //@ts-expect-error no type def support yet
+      if (!window.cloudinary) {
+        setTimeout(() => initCloudinaryWidget(), 500); //Chờ 500ms rồi gọi lại chính hàm này khi mà window.cloudinary chưa load kịp
+        return;
+      }
+      //@ts-expect-error no type def support yet
+      const myWidget = window.cloudinary.createUploadWidget(
+        {
+          cloudName: 'dvrntpyit',
+          uploadPreset: 'easy-frontend',
+          multiple: false, // restrict upload to a single file
+          clientAllowedFormats: ['image'], // restrict uploading to image files only
+          maxImageFileSize: 200000, // restrict file size to less than 2MB
+          // sources: ["local", "url"], // restrict the upload sources to URL and local files
+          // folder: "user_images", // upload files to the specified folder
+          // tags: ["users", "profile"], // add the given tags to the uploaded files
+          // context: { alt: "user_uploaded" }, // add the given context data to the uploaded files
+          // maxWidth: 2000, // Scales the image down to a width of 2000 pixels before uploading
+          // theme: "purple", // Change to a purple theme
+        },
+        //@ts-expect-error no type support yet
+        (error, result) => {
+          if (!error && result && result.event === 'success') {
+            const quill = editorRef.current;
             //@ts-expect-error no type support yet
-            quill.getEditor()?.insertEmbed?.(range.index, 'image', result.info.secure_url);
+            const range = quill?.getEditorSelection?.();
+            // console.log({ quill, range });
+            if (quill && range) {
+              //@ts-expect-error no type support yet
+              quill.getEditor()?.insertEmbed?.(range.index, 'image', result.info.secure_url);
+            }
           }
-        }
-      },
-    );
-    cloudinaryWidgetRef.current = myWidget;
+        },
+      );
+      cloudinaryWidgetRef.current = myWidget;
+    }
+    initCloudinaryWidget();
   }, []);
 
   const imageHandler = useCallback(() => {

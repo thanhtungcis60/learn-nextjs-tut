@@ -1,5 +1,6 @@
 import { workApi } from '@/api-client';
 import { QueryKeys } from '@/constants';
+import { WorkPayload } from '@/models';
 import useSWR, { SWRConfiguration } from 'swr';
 
 export interface UseWorkDetailsProps {
@@ -23,5 +24,9 @@ export function useWorkDetails({ workId, options, enable = true }: UseWorkDetail
       ...options,
     },
   );
-  return swrResponse;
+  async function updateWork(payload: Partial<WorkPayload>) {
+    const newWork = await workApi.update(payload);
+    swrResponse.mutate(newWork);
+  }
+  return { ...swrResponse, updateWork };
 }
