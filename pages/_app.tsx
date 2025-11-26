@@ -33,6 +33,7 @@ import '@/styles/editor-form.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Script from 'next/script';
+import { Auth } from '@/components/common';
 
 const clientSideEmotionCache = createEmotionCache();
 export default function App(props: AppPropsWithLayout) {
@@ -47,11 +48,13 @@ export default function App(props: AppPropsWithLayout) {
         <ToastContainer />
         <SWRConfig value={{ fetcher: (url) => axiosClient.get(url), shouldRetryOnError: false }}>
           <Layout>
-            <Component {...pageProps} />
-            <Script
-              src="https://widget.cloudinary.com/v2.0/global/all.js"
-              strategy="afterInteractive"
-            ></Script>
+            <Auth requireLogin={Component.requireLogin || false}>
+              <Component {...pageProps} />
+              <Script
+                src="https://widget.cloudinary.com/v2.0/global/all.js"
+                strategy="afterInteractive"
+              ></Script>
+            </Auth>
           </Layout>
         </SWRConfig>
       </ThemeProvider>

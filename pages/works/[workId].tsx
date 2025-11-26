@@ -28,11 +28,12 @@ export default function AddEditWorkPage() {
         newWork = await updateWork(payload);
         toast.success('Update work successfully');
       }
-      router.push('works');
+      router.push('/works');
     } catch (error) {
       console.log(error);
     }
   }
+  if (!router.isReady) return null;
   return (
     <Box>
       <Container>
@@ -47,3 +48,4 @@ export default function AddEditWorkPage() {
   );
 }
 AddEditWorkPage.Layout = MainLayout;
+AddEditWorkPage.requireLogin = true;
