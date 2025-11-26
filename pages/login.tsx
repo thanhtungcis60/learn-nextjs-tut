@@ -2,6 +2,7 @@ import { LoginForm } from '@/components/auth';
 import { useAuth } from '@/hooks';
 import { LoginPayload } from '@/models';
 import { getErrorMessage } from '@/utils';
+import { decodeUrl } from '@/utils/url';
 import { Box, Paper, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -14,7 +15,8 @@ export default function LoginPage() {
     try {
       await login(payload);
       // console.log('Login redirect to home page');
-      router.push('/');
+      const backTo = router.query?.back_to ? decodeUrl(router.query?.back_to as string) : '/';
+      router.push(backTo);
     } catch (error: unknown) {
       const message = getErrorMessage(error);
       // console.log('failed to login: ', message);
