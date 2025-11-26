@@ -13,6 +13,7 @@ export function HeaderDesktop(props: HeaderDesktopProps) {
   const { profile, logout } = useAuth();
   const isLoggedIn = Boolean(profile?.username);
   const renderedRoutes = ROUTE_LIST.filter((route) => !route.requireLogin || isLoggedIn);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async function handleLogout(e?: any) {
     e?.preventDefault();
     try {
