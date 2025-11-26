@@ -27,6 +27,7 @@ export function useWorkDetails({ workId, options, enable = true }: UseWorkDetail
   async function updateWork(payload: Partial<WorkPayload>) {
     const newWork = await workApi.update(payload);
     swrResponse.mutate(newWork);
+    return newWork;
   }
   return { ...swrResponse, updateWork };
 }

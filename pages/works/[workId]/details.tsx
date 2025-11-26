@@ -1,8 +1,10 @@
 import { MainLayout } from '@/components/layout';
+import { useAuth } from '@/hooks';
 import { Work } from '@/models';
-import { Box, Chip, Container, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Container, Stack, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
 export interface WorkDetailPageProps {
@@ -10,19 +12,31 @@ export interface WorkDetailPageProps {
 }
 export default function WorkDetailsPage({ work }: WorkDetailPageProps) {
   const router = useRouter();
+  const { isLoggedIn } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (router.isFallback) {
     //Nếu client request 1 id chưa có trên server, phải đợi để server render
     return <div style={{ fontSize: '2rem', textAlign: 'center' }}>Loading ...</div>;
   }
   if (!work) return null;
+
   return (
     <Box>
       <Container>
-        <Box mb={4} mt={8}>
+        <Stack mb={4} mt={8} direction="row" alignItems="center" justifyContent="space-between">
           <Typography component="h1" variant="h3" fontWeight="bold">
             {work.title}
           </Typography>
-        </Box>
+          {mounted && isLoggedIn && (
+            <Button variant="contained" size="small" onClick={() => router.push(`/works/${work.id}`)}>
+              Edit this one
+            </Button>
+          )}
+        </Stack>
         <Stack direction="row" my={2}>
           <Chip color="primary" label={new Date(Number(work.createdAt)).getFullYear()} size="small" />
           <Typography ml={3} color="GrayText">

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ROUTE_LIST } from './routes';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks';
+import { encodeUrl } from '@/utils';
 
 export interface HeaderDesktopProps {}
 
@@ -12,6 +13,14 @@ export function HeaderDesktop(props: HeaderDesktopProps) {
   const { profile, logout } = useAuth();
   const isLoggedIn = Boolean(profile?.username);
   const renderedRoutes = ROUTE_LIST.filter((route) => !route.requireLogin || isLoggedIn);
+  async function handleLogout(e?: any) {
+    e?.preventDefault();
+    try {
+      await logout();
+    } finally {
+      router.push('/');
+    }
+  }
 
   return (
     <Box display={{ xs: 'none', lg: 'block' }} py={2}>
@@ -34,7 +43,7 @@ export function HeaderDesktop(props: HeaderDesktopProps) {
               component={Link}
               key="/logout"
               href="#"
-              onClick={logout}
+              onClick={handleLogout}
               sx={{ ml: 2, fontWeight: 'medium' }}
             >
               Logout
@@ -43,7 +52,7 @@ export function HeaderDesktop(props: HeaderDesktopProps) {
             <MuiLink
               component={Link}
               key="/login"
-              href="/login"
+              href={`/login?back_to=${encodeUrl(router.asPath)}`}
               sx={{ ml: 2, fontWeight: 'medium', cursor: 'pointer' }}
             >
               Login

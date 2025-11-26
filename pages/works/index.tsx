@@ -24,6 +24,7 @@ export default function WorksPage() {
   const totalPages = Boolean(_totalRows) ? Math.ceil(_totalRows / _limit) : 0;
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
+    console.log('isLoggedIn: ', isLoggedIn);
     setMounted(true);
   }, []);
 

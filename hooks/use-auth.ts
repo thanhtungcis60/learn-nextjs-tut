@@ -30,8 +30,12 @@ export function useAuth(options?: Partial<SWRConfiguration>) {
     },
     onError(err, key, config) {
       //failed to get profile
-      console.log(err);
-      logout();
+      console.log('useAuth onError', err);
+      // Try to infer HTTP status from different error shapes and only logout on 401
+      const status = (err && (err.status || err.statusCode)) || (err && err.response && err.response.status);
+      if (status === 401 || (typeof err === 'string' && err.toLowerCase().includes('token'))) {
+        logout();
+      }
     },
   });
 
@@ -51,7 +55,7 @@ export function useAuth(options?: Partial<SWRConfiguration>) {
   }
   async function logout() {
     await authApi.logout();
-    mutate({}, false); //xoa profile di, ko can goi lai api /profile
+    mutate(null, false); // xóa profile (set về null), không gọi lại api /profile
     localStorage.removeItem(StorageKeys.USER_INFO);
   }
 

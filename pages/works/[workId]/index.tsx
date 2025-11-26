@@ -28,7 +28,7 @@ export default function AddEditWorkPage() {
         newWork = await updateWork(payload);
         toast.success('Update work successfully');
       }
-      router.push('/works');
+      router.push(`/works/${newWork?.id}/details`);
     } catch (error) {
       console.log(error);
     }
@@ -39,7 +39,8 @@ export default function AddEditWorkPage() {
       <Container>
         <Box mb={4} mt={8}>
           <Typography component="h1" variant="h3" fontWeight="bold">
-            {isAddMode ? 'Add Work Page' : `Edit Work #${workId}`}
+            {/* {isAddMode ? 'Add Work Page' : `Edit Work #${workId}`} */}
+            Add edit work
           </Typography>
         </Box>
         <Box>{(isAddMode || Boolean(data)) && <WorkForm initialValues={data} onSubmit={handleSubmit} />}</Box>
