@@ -16,9 +16,10 @@ export default function WorkDetailsPage({ work }: WorkDetailPageProps) {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
-  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(work.thumbnailUrl);
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(work?.thumbnailUrl || '');
   useEffect(() => {
     setMounted(true);
+    setImgSrc(work?.thumbnailUrl);
   }, []);
 
   if (router.isFallback) {
