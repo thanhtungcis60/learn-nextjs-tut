@@ -1,8 +1,10 @@
 import { MainLayout } from '@/components/layout';
+import { DEFAULT_THUMBNAIL_URL } from '@/constants';
 import { useAuth } from '@/hooks';
 import { Work } from '@/models';
 import { Box, Button, Chip, Container, Stack, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
+import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import sanitizeHtml from 'sanitize-html';
@@ -14,6 +16,7 @@ export default function WorkDetailsPage({ work }: WorkDetailPageProps) {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(work.thumbnailUrl);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -37,13 +40,26 @@ export default function WorkDetailsPage({ work }: WorkDetailPageProps) {
             </Button>
           )}
         </Stack>
-        <Stack direction="row" my={2}>
-          <Chip color="primary" label={new Date(Number(work.createdAt)).getFullYear()} size="small" />
-          <Typography ml={3} color="GrayText">
-            {work.tagList.join(', ')}
-          </Typography>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <Box width={{ xs: '100%', sm: '246px' }} flexShrink={0}>
+            <Image
+              src={imgSrc}
+              width={246}
+              height={180}
+              alt="work thumbnail"
+              onError={() => setImgSrc(DEFAULT_THUMBNAIL_URL)}
+            />
+          </Box>
+          <Box>
+            <Typography sx={{ fontWeight: 'bold' }}>{work.shortDescription}</Typography>
+            <Stack direction="row" my={2}>
+              <Chip color="secondary" label={new Date(Number(work.createdAt)).getFullYear()} size="small" />
+              <Typography ml={3} color="GrayText">
+                {work.tagList.join(', ')}
+              </Typography>
+            </Stack>
+          </Box>
         </Stack>
-        <Typography>{work.shortDescription}</Typography>
         <Box
           component="div"
           dangerouslySetInnerHTML={{ __html: work.fullDescription }}

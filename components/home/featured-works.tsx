@@ -1,9 +1,14 @@
-import { Work } from '@/models';
+import { ListParams, Work } from '@/models';
 import { Box, Container, Typography } from '@mui/material';
 import { WorkList } from '../work';
+import { useRouter } from 'next/router';
+import { useWorkList } from '@/hooks';
 
 export function FeaturedWorks() {
-  const workList: Work[] = [
+  const router = useRouter();
+  const filters: Partial<ListParams> = { _page: 3, _limit: 3 };
+  const { data } = useWorkList({ params: filters, enable: router.isReady });
+  const workList: Work[] = data?.data || [
     {
       id: '1',
       title: 'Designing Dashboards',
